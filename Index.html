@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CaliStrong">
+<meta name="theme-color" content="#f5f2eb" id="theme-meta">
+<title>CaliStrong</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+/* ── FONTS ── */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* ── LIGHT THEME (default) ── */
+:root {
+  --bg: #f5f2eb;
+  --bg2: #ede9df;
+  --surface: #ffffff;
+  --card: #faf9f6;
+  --border: #ddd8cc;
+  --border2: #c8c0b0;
+  --accent: #1a1a1a;
+  --accent2: #5a3e00;
+  --lime: #6b9e00;
+  --lime-bg: #eef5d6;
+  --lime-border: #c8e080;
+  --orange: #c05800;
+  --orange-bg: #fff0e0;
+  --teal: #007070;
+  --teal-bg: #e0f5f5;
+  --danger: #cc2200;
+  --danger-bg: #fff0ee;
+  --text: #1a1a1a;
+  --text2: #555;
+  --muted: #888;
+  --btn-primary-bg: #1a1a1a;
+  --btn-primary-text: #f5f2eb;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --header-sub: #777;
+}
+
+/* ── DARK THEME ── */
+[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --bg2: #111;
+  --surface: #141414;
+  --card: #181818;
+  --border: #252525;
+  --border2: #333;
+  --accent: #c8f035;
+  --accent2: #a0c020;
+  --lime: #c8f035;
+  --lime-bg: #1a1f0a;
+  --lime-border: #3a5010;
+  --orange: #f0a535;
+  --orange-bg: #1f170a;
+  --teal: #35f0c8;
+  --teal-bg: #0a1f1c;
+  --danger: #ff4545;
+  --danger-bg: #331111;
+  --text: #f0f0f0;
+  --text2: #aaa;
+  --muted: #666;
+  --btn-primary-bg: #c8f035;
+  --btn-primary-text: #0a0a0a;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
+  --header-sub: #555;
+}
+
+/* ── RESET ── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',system-ui,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  padding-bottom:calc(80px + env(safe-area-inset-bottom));
+  transition:background .25s,color .25s;
+}
+
+/* ── HEADER ── */
+header{
+  padding:52px 20px 0;
+  position:relative;
+}
+.htag{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:3px;
+  color:var(--lime);
+  text-transform:uppercase;margin-bottom:6px;
+}
+h1{
+  font-family:'Bebas Neue',Impact,sans-serif;
+  font-size:clamp(52px,15vw,96px);
+  line-height:.88;letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--text);
+}
+h1 .hl{color:var(--lime);}
+.hsub{font-size:12px;color:var(--header-sub);margin-top:10px;line-height:1.6;}
+
+/* Theme toggle */
+.theme-toggle{
+  position:absolute;top:52px;right:20px;
+  width:40px;height:40px;
+  border-radius:10px;border:1px solid var(--border);
+  background:var(--surface);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;
+  box-shadow:var(--shadow);
+  transition:all .2s;
+}
+.theme-toggle:active{transform:scale(.95);}
+
+/* ── STAT STRIP ── */
+.strip{
+  margin:24px 20px 0;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.stat{background:var(--surface);padding:14px 12px;transition:background .25s;}
+.sl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:3px;}
+.sv{font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;color:var(--lime);line-height:1;}
+.sd{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4;}
+
+/* ── NAV TABS (bottom) ── */
+.app-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:8px 0 calc(8px + env(safe-area-inset-bottom));
+  display:flex;
+  backdrop-filter:blur(12px);
+  z-index:90;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+  transition:background .25s;
+}
+.nav-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;padding:4px 0;border:none;background:none;color:var(--muted);
+  font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;
+  transition:color .2s;
+}
+.nav-tab .ni{font-size:20px;line-height:1;}
+.nav-tab.active{color:var(--lime);}
+[data-theme="dark"] .nav-tab.active{color:var(--lime);}
+[data-theme="light"] .nav-tab.active{color:#1a1a1a;}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── PHASE NAV ── */
+.phase-nav{display:flex;gap:8px;padding:24px 20px 0;overflow-x:auto;scrollbar-width:none;}
+.phase-nav::-webkit-scrollbar{display:none;}
+.pbtn{
+  flex-shrink:0;padding:9px 16px;border-radius:8px;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--muted);font-size:12px;font-weight:600;
+  cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;
+  transition:all .2s;
+}
+.pbtn.p1{border-color:var(--lime);color:var(--lime);background:var(--lime-bg);}
+.pbtn.p2{border-color:var(--orange);color:var(--orange);background:var(--orange-bg);}
+.pbtn.p3{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);}
+
+/* Phase info */
+.pinfo{margin:16px 20px 0;padding:16px;background:var(--surface);border-radius:12px;border-left:3px solid var(--lime);box-shadow:var(--shadow);transition:background .25s;}
+.pinfo.p2{border-left-color:var(--orange);}
+.pinfo.p3{border-left-color:var(--teal);}
+.pititle{font-family:'Bebas Neue',Impact,sans-serif;font-size:19px;margin-bottom:5px;letter-spacing:1px;color:var(--text);}
+.pidesc{font-size:12px;color:var(--text2);line-height:1.6;}
+.pitags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.pitag{padding:2px 7px;border-radius:4px;font-size:9px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--muted);border:1px solid var(--border);}
+
+/* Progress */
+.prog-sec{padding:18px 20px 0;}
+.prog-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;box-shadow:var(--shadow);transition:background .25s;}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:7px;}
+.prog-row span{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.prog-row span:last-child{color:var(--lime);}
+.prog-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--lime);border-radius:3px;transition:width .4s ease;}
+
+/* Week selector */
+.wsec{padding:18px 20px 0;}
+.seclabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.wgrid{display:flex;gap:6px;flex-wrap:wrap;}
+.wbtn{
+  width:40px;height:40px;border-radius:8px;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  position:relative;font-weight:500;transition:all .15s;
+}
+.wbtn.active{background:var(--text);border-color:var(--text);color:var(--bg);font-weight:700;}
+[data-theme="dark"] .wbtn.active{background:var(--lime);border-color:var(--lime);color:#000;}
+.wbtn.logged::after{content:'';position:absolute;bottom:3px;right:3px;width:5px;height:5px;border-radius:50%;background:var(--teal);}
+.wbtn.active.logged::after{background:var(--bg);}
+
+/* Day tabs */
+.dsec{padding:18px 20px 0;}
+.dtabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.dtabs::-webkit-scrollbar{display:none;}
+.dtab{
+  flex-shrink:0;padding:8px 12px;border-radius:7px;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--muted);font-size:11px;font-weight:500;
+  cursor:pointer;position:relative;font-family:'DM Sans',sans-serif;
+  transition:all .15s;white-space:nowrap;
+}
+.dtab.active{background:var(--text);border-color:var(--text);color:var(--bg);}
+[data-theme="dark"] .dtab.active{background:var(--lime);border-color:var(--lime);color:#000;}
+.dtab.rest{color:var(--danger);border-color:var(--danger-bg);}
+.dtab.rest.active{background:var(--danger);border-color:var(--danger);color:#fff;}
+.dtab.done::after{content:'✓';position:absolute;top:-6px;right:-4px;font-size:9px;background:var(--teal);color:#fff;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+
+/* Workout display */
+.wdisplay{padding:18px 20px 0;}
+.wname{font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;letter-spacing:1px;color:var(--text);}
+.wfocus{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;margin-bottom:14px;}
+.pbanner{margin-bottom:12px;padding:10px 12px;background:var(--lime-bg);border:1px solid var(--lime-border);border-radius:8px;display:flex;gap:8px;align-items:center;font-size:11px;color:var(--lime);line-height:1.5;}
+[data-theme="light"] .pbanner{color:var(--lime);}
+.logged-banner{margin-bottom:12px;padding:10px 12px;background:var(--teal-bg);border:1px solid var(--teal);border-radius:8px;display:flex;gap:8px;align-items:center;font-size:12px;color:var(--teal);}
+
+/* Exercise cards */
+.excard{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:8px;overflow:hidden;
+  box-shadow:var(--shadow);transition:background .25s,box-shadow .2s;
+}
+.excard:active{box-shadow:var(--shadow-lg);}
+.exhead{display:flex;align-items:center;padding:14px;cursor:pointer;gap:12px;}
+.exnum{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);min-width:18px;}
+.exicon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.exmain{flex:1;min-width:0;}
+.exname{font-size:13px;font-weight:600;color:var(--text);}
+.exrx{font-family:'DM Mono',monospace;font-size:10px;color:var(--lime);margin-top:2px;}
+.exchev{font-size:11px;color:var(--muted);transition:transform .2s;}
+.excard.open .exchev{transform:rotate(180deg);}
+.exbody{display:none;padding:0 14px 14px;border-top:1px solid var(--border);}
+.excard.open .exbody{display:block;}
+.extip{font-size:12px;color:var(--text2);line-height:1.6;margin:12px 0 8px;}
+.cue{display:flex;gap:7px;align-items:flex-start;font-size:11px;color:var(--text2);margin-bottom:4px;}
+.cdot{width:4px;height:4px;border-radius:50%;background:var(--lime);margin-top:5px;flex-shrink:0;}
+.muscles{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+.mtag{padding:2px 6px;border-radius:4px;font-size:9px;font-family:'DM Mono',monospace;background:var(--bg2);color:var(--muted);border:1px solid var(--border);}
+.exprog{margin-top:10px;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;border-top:1px solid var(--border);padding-top:8px;}
+
+/* ── MEDIA SECTION ── */
+.media-section{margin:12px 0 0;border-top:1px solid var(--border);padding-top:12px;}
+.media-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.media-grid{display:flex;gap:8px;flex-wrap:wrap;}
+.media-item{position:relative;border-radius:8px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);}
+.media-item img,.media-item video{width:120px;height:90px;object-fit:cover;display:block;cursor:pointer;}
+.media-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);border:none;border-radius:50%;width:20px;height:20px;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.media-upload-btn{
+  width:120px;height:90px;border-radius:8px;border:1px dashed var(--border2);
+  background:var(--bg2);color:var(--muted);font-size:11px;
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font-family:'DM Sans',sans-serif;transition:all .2s;
+}
+.media-upload-btn:hover{border-color:var(--lime);color:var(--lime);}
+.media-upload-btn span:first-child{font-size:22px;}
+
+/* Lightbox */
+.lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.92);
+  display:none;align-items:center;justify-content:center;z-index:200;
+}
+.lightbox.open{display:flex;}
+.lightbox img,.lightbox video{max-width:95vw;max-height:88vh;border-radius:10px;object-fit:contain;}
+.lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:36px;height:36px;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* Rest card */
+.restcard{background:var(--card);border:1px solid var(--danger-bg);border-radius:12px;padding:28px 20px;text-align:center;box-shadow:var(--shadow);}
+.resticon{font-size:36px;margin-bottom:8px;}
+.resttitle{font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;color:var(--danger);margin-bottom:6px;letter-spacing:1px;}
+.resttext{font-size:12px;color:var(--text2);line-height:1.6;}
+
+/* Log button */
+.log-fab{
+  position:fixed;bottom:calc(70px + env(safe-area-inset-bottom));right:16px;
+  width:56px;height:56px;border-radius:16px;
+  background:var(--btn-primary-bg);color:var(--btn-primary-text);
+  border:none;font-size:22px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;z-index:80;
+}
+.log-fab:active{transform:scale(.93);}
+.log-fab.done{background:var(--teal);color:#fff;}
+.log-fab.rest-day{display:none;}
+
+/* ── CALENDAR PAGE ── */
+.cal-page{padding:20px;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.cal-month{font-family:'Bebas Neue',Impact,sans-serif;font-size:28px;letter-spacing:1px;color:var(--text);}
+.cal-nav{display:flex;gap:6px;}
+.cal-nav button{
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.cal-nav button:active{transform:scale(.92);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-day-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-align:center;padding:4px 0;text-transform:uppercase;}
+.cal-cell{
+  aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);
+  position:relative;cursor:default;
+}
+.cal-cell.today{border:1.5px solid var(--border2);color:var(--text);font-weight:700;}
+.cal-cell.logged{background:var(--lime-bg);color:var(--lime);font-weight:700;}
+[data-theme="dark"] .cal-cell.logged{color:var(--lime);}
+[data-theme="light"] .cal-cell.logged{color:#3a6000;}
+.cal-cell.logged::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--lime);}
+.cal-cell.empty{pointer-events:none;}
+.cal-cell.rest-day{opacity:.3;}
+
+/* Streak stats */
+.streak-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0;}
+.streak-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow);}
+.sc-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.sc-val{font-family:'Bebas Neue',Impact,sans-serif;font-size:32px;color:var(--lime);line-height:1;}
+.sc-sub{font-size:11px;color:var(--text2);margin-top:3px;}
+
+/* Month log list */
+.month-log{margin-top:4px;}
+.month-log-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.log-entry{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.log-main{flex:1;}
+.log-title{font-size:13px;font-weight:600;color:var(--text);}
+.log-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;}
+.log-del{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;}
+.log-empty{text-align:center;padding:32px 20px;color:var(--muted);font-size:13px;}
+
+/* ── SCIENCE PAGE ── */
+.sci-page{padding:20px;}
+.sci-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow);}
+.sci-icon{font-size:24px;margin-bottom:8px;}
+.sci-title{font-family:'Bebas Neue',Impact,sans-serif;font-size:18px;letter-spacing:1px;color:var(--text);margin-bottom:6px;}
+.sci-body{font-size:12px;color:var(--text2);line-height:1.7;}
+
+/* ── INSTALL BANNER ── */
+.ibanner{
+  margin:16px 20px 0;padding:12px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);
+}
+.itext{flex:1;font-size:11px;color:var(--text2);line-height:1.5;}
+.ibtn{padding:7px 12px;background:var(--btn-primary-bg);border:none;border-radius:6px;color:var(--btn-primary-text);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.idismiss{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;}
+
+/* ── PAGE HEADER ── */
+.page-head{padding:48px 20px 0;display:flex;align-items:flex-end;justify-content:space-between;}
+.page-title{font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;letter-spacing:2px;color:var(--text);}
+.page-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* divider */
+.divider{height:1px;background:var(--border);margin:20px 0;}
+
+/* ── LIGHTBOX ── */
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:200;}
+#lightbox.open{display:flex;}
+#lightbox-content{max-width:95vw;max-height:88vh;}
+#lightbox-content img,#lightbox-content video{max-width:95vw;max-height:88vh;border-radius:10px;object-fit:contain;}
+#lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:36px;height:36px;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lightbox-close" onclick="closeLightbox()">×</button>
+  <div id="lightbox-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  PAGE: WORKOUT                                 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page active" id="page-workout">
+
+<header>
+  <div class="htag">// Progressive Program</div>
+  <h1>CALI<span class="hl">STRONG</span></h1>
+  <p class="hsub">Science-based calisthenics for muscle growth — built to scale with you.</p>
+  <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+</header>
+
+<div class="ibanner" id="ibanner" style="display:none">
+  <span style="font-size:20px">📲</span>
+  <span class="itext">Add to home screen — works offline too.</span>
+  <button class="ibtn" id="install-btn">Install</button>
+  <button class="idismiss" onclick="dismissInstall()">×</button>
+</div>
+
+<div class="strip">
+  <div class="stat"><div class="sl">Volume</div><div class="sv">10–20</div><div class="sd">Sets/muscle/week</div></div>
+  <div class="stat"><div class="sl">RIR Target</div><div class="sv">1–3</div><div class="sd">Reps from failure</div></div>
+  <div class="stat"><div class="sl">Sessions</div><div class="sv" id="total-stat">0</div><div class="sd">Logged so far</div></div>
+</div>
+
+<div class="phase-nav">
+  <button class="pbtn p1" onclick="setPhase(1)">Phase 1 — Foundation</button>
+  <button class="pbtn" id="pb2" onclick="setPhase(2)">Phase 2 — Strength</button>
+  <button class="pbtn" id="pb3" onclick="setPhase(3)">Phase 3 — Skill</button>
+</div>
+
+<div class="pinfo" id="pi1">
+  <div class="pititle">Foundation (Weeks 1–8)</div>
+  <div class="pidesc">Build your base. Master form before complexity. Higher reps, shorter rest. Focus on mind-muscle connection and full range of motion.</div>
+  <div class="pitags"><span class="pitag">3×/week full body</span><span class="pitag">8–15 reps</span><span class="pitag">90s rest</span><span class="pitag">Tempo work</span></div>
+</div>
+<div class="pinfo p2" id="pi2" style="display:none">
+  <div class="pititle" style="color:var(--orange)">Strength (Weeks 9–20)</div>
+  <div class="pidesc">Harder variations, higher intensity. Archer push-ups, full pull-ups, single-leg squats, L-sits. Volume cycles up and down.</div>
+  <div class="pitags"><span class="pitag">4×/week split</span><span class="pitag">5–12 reps</span><span class="pitag">2–3min rest</span><span class="pitag">Harder variants</span></div>
+</div>
+<div class="pinfo p3" id="pi3" style="display:none">
+  <div class="pititle" style="color:var(--teal)">Skill (Week 21+)</div>
+  <div class="pidesc">Advanced skills: muscle-ups, handstand push-ups, front lever, pistol squats, weighted calisthenics.</div>
+  <div class="pitags"><span class="pitag">Skill sessions</span><span class="pitag">Low-rep strength</span><span class="pitag">3–5min rest</span><span class="pitag">Isometric holds</span></div>
+</div>
+
+<div class="prog-sec">
+  <div class="prog-box">
+    <div class="prog-row"><span>PHASE PROGRESS</span><span id="prog-label">Week 1 / 8</span></div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:12.5%"></div></div>
+  </div>
+</div>
+
+<div class="wsec">
+  <div class="seclabel">Select Week</div>
+  <div class="wgrid" id="wgrid"></div>
+</div>
+
+<div class="divider"></div>
+
+<div class="dsec">
+  <div class="seclabel">Training Day</div>
+  <div class="dtabs" id="dtabs"></div>
+</div>
+
+<div class="wdisplay" id="wdisplay" style="padding:18px 20px 20px"></div>
+
+<!-- FAB log button -->
+<button class="log-fab" id="log-fab" onclick="logSession()">✓</button>
+
+</div><!-- /page-workout -->
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  PAGE: CALENDAR                               -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page" id="page-calendar">
+<div class="page-head">
+  <div>
+    <div class="page-title">Calendar</div>
+    <div class="page-sub">// Consistency tracker</div>
+  </div>
+</div>
+<div class="cal-page">
+  <div class="cal-header">
+    <div class="cal-month" id="cal-month-label">May 2026</div>
+    <div class="cal-nav">
+      <button onclick="calNav(-1)">‹</button>
+      <button onclick="calNav(1)">›</button>
+    </div>
+  </div>
+  <div class="cal-grid" id="cal-grid"></div>
+
+  <div class="streak-cards">
+    <div class="streak-card">
+      <div class="sc-label">Current Streak</div>
+      <div class="sc-val" id="streak-val">0</div>
+      <div class="sc-sub">days in a row 🔥</div>
+    </div>
+    <div class="streak-card">
+      <div class="sc-label">This Month</div>
+      <div class="sc-val" id="month-val">0</div>
+      <div class="sc-sub">sessions logged</div>
+    </div>
+    <div class="streak-card">
+      <div class="sc-label">All Time</div>
+      <div class="sc-val" id="alltime-val">0</div>
+      <div class="sc-sub">total sessions</div>
+    </div>
+    <div class="streak-card">
+      <div class="sc-label">Best Streak</div>
+      <div class="sc-val" id="best-streak-val">0</div>
+      <div class="sc-sub">consecutive days</div>
+    </div>
+  </div>
+
+  <div class="month-log">
+    <div class="month-log-title">This Month's Sessions</div>
+    <div id="month-log-list"></div>
+  </div>
+</div>
+</div><!-- /page-calendar -->
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  PAGE: SCIENCE                                 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page" id="page-science">
+<div class="page-head">
+  <div>
+    <div class="page-title">The Science</div>
+    <div class="page-sub">// Why this works</div>
+  </div>
+</div>
+<div class="sci-page">
+  <div class="sci-section">
+    <div class="sci-icon">📈</div>
+    <div class="sci-title">Progressive Overload</div>
+    <div class="sci-body">The #1 driver of muscle growth. Each week, make the exercise slightly harder — more reps, harder variation, slower tempo. Muscles grow only when forced to adapt to a new stimulus.</div>
+  </div>
+  <div class="sci-section">
+    <div class="sci-icon">⚡</div>
+    <div class="sci-title">Mechanical Tension & Metabolic Stress</div>
+    <div class="sci-body">Calisthenics creates high mechanical tension (especially at end-range) and metabolic stress when taken close to failure. Both signals trigger muscle protein synthesis and hypertrophy.</div>
+  </div>
+  <div class="sci-section">
+    <div class="sci-icon">📊</div>
+    <div class="sci-title">Volume Landmarks (MEV → MAV)</div>
+    <div class="sci-body">Dr. Mike Israetel's research defines Minimum Effective Volume (~10 sets/week) and Maximum Adaptive Volume (~20 sets/week). This program starts near MEV and ramps to MAV over months.</div>
+  </div>
+  <div class="sci-section">
+    <div class="sci-icon">🎯</div>
+    <div class="sci-title">RIR — Reps in Reserve</div>
+    <div class="sci-body">Training 1–3 reps from failure maximises activation without CNS burnout. Beginners leave 3 RIR; advanced athletes push to 1 RIR on final sets. Never grind every set to absolute zero.</div>
+  </div>
+  <div class="sci-section">
+    <div class="sci-icon">😴</div>
+    <div class="sci-title">Deload Every 4–6 Weeks</div>
+    <div class="sci-body">Reduce volume by ~40% every 4–6 weeks. Supercompensation happens during recovery — you grow between workouts, not during them. Skipping deloads leads to plateaus and overuse injury.</div>
+  </div>
+  <div class="sci-section">
+    <div class="sci-icon">🥩</div>
+    <div class="sci-title">Nutrition Basics</div>
+    <div class="sci-body">Target 1.6–2.2g protein per kg of bodyweight daily. At ~83kg that's 133–183g. A slight caloric surplus (200–300 kcal) accelerates gains. Sleep 7–9hrs — growth hormone peaks during deep sleep.</div>
+  </div>
+  <div style="height:20px"></div>
+</div>
+</div><!-- /page-science -->
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  BOTTOM NAV                                   -->
+<!-- ══════════════════════════════════════════════ -->
+<nav class="app-nav">
+  <button class="nav-tab active" id="tab-workout" onclick="showPage('workout')">
+    <span class="ni">💪</span><span>Workout</span>
+  </button>
+  <button class="nav-tab" id="tab-calendar" onclick="showPage('calendar')">
+    <span class="ni">📅</span><span>Calendar</span>
+  </button>
+  <button class="nav-tab" id="tab-science" onclick="showPage('science')">
+    <span class="ni">⚗️</span><span>Science</span>
+  </button>
+</nav>
+
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+const PH = {
+  1:{label:"Foundation",weeks:8,color:"#6b9e00",colorDark:"#c8f035",
+     days:["Full Body A","Rest","Full Body B","Rest","Full Body C","Rest","Rest"],
+     workouts:{
+      "Full Body A":{name:"Full Body A",focus:"Push-dominant • Upper body emphasis",
+        note:"Add 1–2 reps each week. When you hit the top of the rep range, move to the next variation.",
+        ex:[
+          {n:"Incline Push-Up",i:"💪",rx:"3 × 10–15 reps | 90s rest",
+           tip:"Use a wall or elevated surface. Reduces load — perfect entry point for building push mechanics.",
+           cues:["Keep core tight, body in a straight plank line","Lower chest to surface, elbows ~45°","Full extension at top"],
+           m:["Chest","Triceps","Front Delts"],prog:"Wall push-up → Elevated (table) → Floor push-up"},
+          {n:"Bodyweight Squat",i:"🦵",rx:"3 × 15–20 reps | 90s rest",
+           tip:"2 seconds down, 1 second pause at bottom, 1 second up. Quality over quantity.",
+           cues:["Feet shoulder-width, toes slightly out","Knee tracks over pinky toe","Chest up, breathe"],
+           m:["Quads","Glutes","Hamstrings"],prog:"Standard → Pause squat (3s) → Heel elevated squat"},
+          {n:"Doorframe / Table Row",i:"🏋️",rx:"3 × 8–12 reps | 90s rest",
+           tip:"Find a sturdy table. Body at ~45° incline to start.",
+           cues:["Pull elbows back — not up","Squeeze shoulder blades at top","3 second negative"],
+           m:["Lats","Biceps","Rear Delts","Rhomboids"],prog:"45° → More horizontal → Full horizontal row"},
+          {n:"Dead Hang",i:"🌀",rx:"3 × 20–40s | 90s rest",
+           tip:"Builds grip, shoulder stability, and scapular awareness — prerequisites for pull-ups.",
+           cues:["Hang fully — let shoulders rise (passive hang)","Breathe steadily","Progress to active hang"],
+           m:["Grip","Rotator Cuff","Lats"],prog:"Passive hang → Active hang → Scapular retractions → Negatives"},
+          {n:"Plank Hold",i:"⚡",rx:"3 × 20–40s | 60s rest",
+           tip:"Core stability is non-negotiable for every advanced calisthenics movement.",
+           cues:["Squeeze glutes, quads, and core simultaneously","Neutral spine","Breathe — don't hold"],
+           m:["Core","Shoulders","Glutes"],prog:"Standard → Shoulder taps → Plank with leg raise"}
+        ]},
+      "Full Body B":{name:"Full Body B",focus:"Pull-dominant • Posterior chain emphasis",
+        note:"Focus on quality. Slow eccentrics (3s down) build more muscle with less joint stress.",
+        ex:[
+          {n:"Negative Pull-Up",i:"⬆️",rx:"3 × 3–5 negatives | 2min rest",
+           tip:"Jump to the top and lower as slowly as possible. Best pull-up builder for beginners.",
+           cues:["Take 5–8 seconds on the way down","Core tight — no swinging","Fully extend at bottom"],
+           m:["Lats","Biceps","Brachialis"],prog:"5s negative → 8s negative → Banded → Full pull-up"},
+          {n:"Glute Bridge",i:"🍑",rx:"3 × 15–20 reps | 60s rest",
+           tip:"Posterior chain is often undertrained in calisthenics. Fix this from day one.",
+           cues:["Drive heels into floor","Squeeze glutes at top — full hip extension","Don't arch lower back"],
+           m:["Glutes","Hamstrings","Lower Back"],prog:"2-leg → Pause (3s) → Single-leg glute bridge"},
+          {n:"Pike Push-Up",i:"🔺",rx:"3 × 6–12 reps | 90s rest",
+           tip:"Foundation of overhead pressing. Builds toward handstand push-ups.",
+           cues:["Hips high, body inverted V","Lower crown of head toward floor","Elbows track slightly outward"],
+           m:["Front Delts","Triceps","Upper Chest"],prog:"Pike → Elevated pike → Wall HSPU"},
+          {n:"Superman Hold",i:"🦸",rx:"3 × 15–20 reps | 60s rest",
+           tip:"Posterior chain endurance — critical for back health and front lever later.",
+           cues:["Lift arms and legs simultaneously","Hold 2s at top","Keep neck neutral"],
+           m:["Erector Spinae","Glutes","Rear Delts"],prog:"Superman reps → Longer holds → Prone Y/T raises"},
+          {n:"Hollow Body Hold",i:"🌙",rx:"3 × 15–30s | 60s rest",
+           tip:"Foundation of every gymnastics movement — L-sits, muscle-ups, handstands all need this.",
+           cues:["Lower back pressed flat — no arch","Arms overhead, legs off floor","Bend knees if too hard"],
+           m:["Deep Core","Hip Flexors","Serratus"],prog:"Knees bent → Legs at 45° → Legs low → Add reach"}
+        ]},
+      "Full Body C":{name:"Full Body C",focus:"Leg & core emphasis • Technique refinement",
+        note:"Lower upper body demand today — use it to refine squat and core patterns.",
+        ex:[
+          {n:"Bulgarian Split Squat (assisted)",i:"🦵",rx:"3 × 8–12 each leg | 90s rest",
+           tip:"Use a wall for balance. Most effective single-leg exercise.",
+           cues:["Rear foot elevated, front foot far forward","Front knee tracks over toes","Lower slowly"],
+           m:["Quads","Glutes","Hip Flexors"],prog:"Assisted → Unassisted → Pause → Pistol squat prep"},
+          {n:"Push-Up (standard)",i:"💪",rx:"3 × 8–15 reps | 90s rest",
+           tip:"By week 3–4 you should be on floor push-ups. If not, go back to incline.",
+           cues:["Body rigid — one long plank","Lower until chest touches floor","Explosive up, controlled down"],
+           m:["Chest","Triceps","Core"],prog:"Standard → Slow eccentric (3s) → Pause at bottom → Grip variations"},
+          {n:"Inverted Row",i:"🔄",rx:"3 × 8–15 reps | 90s rest",
+           tip:"Set up under a sturdy table. The more horizontal your body, the harder it is.",
+           cues:["Pull chest to edge — not chin","Elbows drive back, not up","Keep body straight"],
+           m:["Lats","Biceps","Rear Delts"],prog:"Feet on floor → Feet elevated → Feet elevated + pause"},
+          {n:"Calf Raises",i:"🏃",rx:"3 × 20–30 reps | 60s rest",
+           tip:"Do on a step for full range. Calves need high volume to grow.",
+           cues:["Full plantar flexion at top","Full dorsiflexion at bottom","No bouncing"],
+           m:["Gastrocnemius","Soleus"],prog:"2-leg → Pause at bottom → Single-leg calf raise"},
+          {n:"Dead Bug",i:"🐞",rx:"3 × 8–10 each side | 60s rest",
+           tip:"Anti-extension core stability — more functional than crunches.",
+           cues:["Lower back stays pressed into floor throughout","Extend opposite arm and leg slowly","Exhale as you extend"],
+           m:["Deep Core","Transverse Abdominis"],prog:"Bent knee → Leg extended → Add arm overhead → Slow tempo"}
+        ]}
+    }},
+  2:{label:"Strength",weeks:12,color:"#c05800",colorDark:"#f0a535",
+     days:["Push","Pull","Rest","Legs & Core","Full Body","Rest","Rest"],
+     workouts:{
+      "Push":{name:"Push Day",focus:"Chest • Shoulders • Triceps",
+        note:"Add 1 rep, slow the eccentric, or move to a harder variation each session.",
+        ex:[
+          {n:"Push-Up (standard / close grip)",i:"💪",rx:"4 × 8–12 reps | 2min rest",
+           tip:"Alternate standard and close-grip across weeks.",
+           cues:["Full ROM — chest touches floor","Pause 1s at bottom for TUT","Explosive concentric"],
+           m:["Chest","Triceps","Front Delts"],prog:"Standard → Archer → Decline → Pseudo planche lean"},
+          {n:"Decline Push-Up",i:"📐",rx:"3 × 8–12 reps | 2min rest",
+           tip:"Feet elevated shifts load to upper chest and front delts. Foundation for HSPU.",
+           cues:["Core rigid — no hip sag","Elbows slightly tucked","Full range — head nearly touches floor"],
+           m:["Upper Chest","Front Delts","Triceps"],prog:"Low elevation → High elevation → Pike → Wall HSPU"},
+          {n:"Pike Push-Up",i:"🔺",rx:"3 × 6–10 reps | 2min rest",
+           tip:"Elevate hands on books for more depth in Phase 2.",
+           cues:["Hips high, inverted V","Ears between biceps at bottom","Control the descent"],
+           m:["Front Delts","Triceps","Upper Back"],prog:"Flat → Hands elevated → Feet raised → Wall HSPU"},
+          {n:"Tricep Dips",i:"⬇️",rx:"3 × 8–12 reps | 90s rest",
+           tip:"Parallel bars allow greater ROM than chair dips.",
+           cues:["Keep torso upright","Lower until upper arm is parallel to floor","Don't lock aggressively at top"],
+           m:["Triceps","Chest","Front Delts"],prog:"Bench dip → Parallel bar dip → Weighted (backpack)"}
+        ]},
+      "Pull":{name:"Pull Day",focus:"Lats • Biceps • Rear Delts • Rhomboids",
+        note:"Pull-ups are the central movement. Track your max reps and beat it every 2 weeks.",
+        ex:[
+          {n:"Pull-Up / Chin-Up",i:"⬆️",rx:"4 × max reps (2 RIR) | 3min rest",
+           tip:"Can't do a full pull-up? Do negatives. Can do 10+? Slow eccentric to 4 seconds.",
+           cues:["Full hang at bottom, chin over bar at top","Elbows drive to ribs","Core braced — no kipping"],
+           m:["Lats","Biceps","Rear Delts"],prog:"Negative → Banded → Full → Weighted → Archer pull-up"},
+          {n:"Inverted Row (feet elevated)",i:"🔄",rx:"3 × 8–12 reps | 2min rest",
+           tip:"Body horizontal, feet on a chair. Targets mid-back hard.",
+           cues:["Pull chest to bar — sternum, not chin","Squeeze shoulder blades at top","3 second negative"],
+           m:["Rhomboids","Lats","Biceps","Rear Delts"],prog:"Feet elevated → Pause at top → Add backpack"},
+          {n:"Face Pull (band / towel)",i:"🎯",rx:"3 × 12–15 reps | 90s rest",
+           tip:"Loop a towel around a doorknob. Critical for shoulder health.",
+           cues:["Pull toward forehead — hands beside ears","Elbows high and wide","Slow and controlled"],
+           m:["Rear Delts","External Rotators","Traps"],prog:"Increase resistance or reps over time"},
+          {n:"Scapular Pull-Up",i:"🦅",rx:"3 × 8–10 reps | 90s rest",
+           tip:"Builds scapular depression needed for muscle-ups and front lever.",
+           cues:["Start hanging passively","Without bending elbows, depress and retract shoulder blades","Lower slowly"],
+           m:["Lower Traps","Serratus","Lats"],prog:"Scapular pull-up → Full pull-up → Archer pull-up"}
+        ]},
+      "Legs & Core":{name:"Legs & Core",focus:"Quads • Glutes • Hamstrings • Deep Core",
+        note:"Legs respond to high volume. Push reps, add pauses, work toward pistol squat.",
+        ex:[
+          {n:"Bulgarian Split Squat",i:"🦵",rx:"4 × 8–10 each leg | 2min rest",
+           tip:"Rear foot on chair or bed. One of the best leg exercises ever studied.",
+           cues:["Shin vertical on front leg at bottom","Full ROM — hip below parallel","Drive through heel to stand"],
+           m:["Quads","Glutes","Hip Flexors"],prog:"Unassisted → Slow eccentric (4s) → Pause → Pistol squat"},
+          {n:"Nordic Hamstring Curl",i:"🔗",rx:"3 × 3–6 reps | 2min rest",
+           tip:"Hook feet under sofa. One of the most effective hamstring exercises ever studied.",
+           cues:["Lower as slowly as possible","Catch yourself with hands at bottom","Drive hips to return"],
+           m:["Hamstrings"],prog:"Assisted → Slower negative → Fewer hand assists"},
+          {n:"Single-Leg Glute Bridge",i:"🍑",rx:"3 × 10–15 each leg | 90s rest",
+           tip:"Fixes left-right imbalances and greatly increases glute activation.",
+           cues:["Non-working leg extended straight","Full hip extension at top","Don't let hips tilt"],
+           m:["Glutes","Hamstrings","Core"],prog:"Flat → Feet elevated → Add pause → Hip thrust"},
+          {n:"L-Sit Progression",i:"✋",rx:"3 × 10–20s | 90s rest",
+           tip:"Use two chairs or fists on floor. Builds entire anterior chain.",
+           cues:["Depress shoulders — push floor away","Tuck knees first, then work toward extension","Breathe"],
+           m:["Hip Flexors","Core","Triceps","Lats"],prog:"Tuck L-sit → One leg → Full L-sit"},
+          {n:"Ab Wheel / Hollow Body",i:"⚙️",rx:"3 × 6–10 reps | 90s rest",
+           tip:"Use a water bottle if no ab wheel. Anti-extension core is key.",
+           cues:["Start on knees","Roll only as far as you maintain neutral spine","Pull back with lats and core"],
+           m:["Core","Lats","Shoulders"],prog:"Knees → Wider base → Longer roll → Standing rollout"}
+        ]},
+      "Full Body":{name:"Full Body",focus:"Volume maintenance • Movement quality",
+        note:"Lower intensity than dedicated days. Practice movement patterns and hit lagging muscles.",
+        ex:[
+          {n:"Archer Push-Up",i:"🏹",rx:"3 × 5–8 each side | 2min rest",
+           tip:"One step closer to a one-arm push-up. Extend one arm as straight as possible.",
+           cues:["Fully extend the assisting arm","Keep hips level","Reduce assist over time"],
+           m:["Chest","Triceps","Core"],prog:"Partial → Full archer → Typewriter → OAP prep"},
+          {n:"Pull-Up (volume)",i:"⬆️",rx:"3 × 60–70% of max | 90s rest",
+           tip:"Practice reps — not limit reps. Keep quality perfect.",
+           cues:["Perfect form every rep","Full ROM always"],
+           m:["Lats","Biceps"],prog:"Add reps or load progressively"},
+          {n:"Pistol Squat Progression",i:"🔫",rx:"3 × 5–8 each leg | 2min rest",
+           tip:"Use a doorframe for balance assist. Work toward free pistol.",
+           cues:["Extend non-working leg forward","Sit down slowly on working leg","Heel stays on floor"],
+           m:["Quads","Glutes","Core"],prog:"Assisted → Partial → Full → Weighted"},
+          {n:"Planche Lean Hold",i:"🧲",rx:"3 × 10–20s | 2min rest",
+           tip:"Lean forward from push-up position, shifting weight onto hands.",
+           cues:["Fingers pointing slightly outward","Lean until shoulders ahead of wrists","Full body tension"],
+           m:["Wrists","Shoulders","Core","Chest"],prog:"Slight lean → More lean → Tuck planche → Full planche"}
+        ]}
+    }},
+  3:{label:"Skill",weeks:8,color:"#007070",colorDark:"#35f0c8",
+     days:["Skill A","Strength","Rest","Skill B","Strength","Rest","Active Recovery"],
+     workouts:{
+      "Skill A":{name:"Skill Session A",focus:"Handstand • Muscle-Up progression",
+        note:"Skill work is about quality, not fatigue. Stop the set when form breaks.",
+        ex:[
+          {n:"Wall Handstand Hold",i:"🤸",rx:"5 × max quality hold | 3min rest",
+           tip:"Chest-to-wall for proper shoulder alignment. Work toward free balance.",
+           cues:["Press floor away — tall shoulders","Squeeze glutes and point toes","Core braced — no banana back"],
+           m:["Shoulders","Core","Forearms"],prog:"Wall → Chest-to-wall → Kick-up practice → Free handstand"},
+          {n:"Muscle-Up Progression",i:"🔝",rx:"5 × 2–4 reps | 3min rest",
+           tip:"Requires 10+ pull-ups. Use hip drive to learn the transition.",
+           cues:["Pull explosively with hip drive","Push chest over bar at transition","Think: pull bar to hips, not chin to bar"],
+           m:["Lats","Chest","Triceps","Core"],prog:"Jumping muscle-up → Banded → Full → Strict"},
+          {n:"Handstand Push-Up (Wall)",i:"🙆",rx:"4 × 3–6 reps | 3min rest",
+           tip:"Back-to-wall HSPU first. Lower until head gently touches a cushion.",
+           cues:["Core tight — no arch","Elbows slightly forward of wrists","Full extension at top"],
+           m:["Front Delts","Triceps","Upper Chest"],prog:"Negative → Partial ROM → Full ROM → Free HSPU"}
+        ]},
+      "Skill B":{name:"Skill Session B",focus:"Front Lever • Pistol Squat • L-Sit",
+        note:"Accumulate time in each isometric hold weekly — even 1 second of progress matters.",
+        ex:[
+          {n:"Front Lever Progression",i:"🎯",rx:"5 × 5–15s holds | 3min rest",
+           tip:"Pinnacle of straight-arm pulling. Takes months — be systematic.",
+           cues:["Body fully horizontal, arms straight","Pull shoulder blades together and down","Tuck → straddle → full"],
+           m:["Lats","Core","Rear Delts","Biceps"],prog:"Tuck → Advanced tuck → One leg → Straddle → Full"},
+          {n:"Pistol Squat (free)",i:"🔫",rx:"4 × 5–8 each leg | 2min rest",
+           tip:"By Phase 3 you should be approaching or hitting the free version.",
+           cues:["Heel firmly planted","Lean torso slightly forward","Control full descent"],
+           m:["Quads","Glutes","Ankles"],prog:"Free → Weighted → Deficit pistol squat"},
+          {n:"L-Sit (full)",i:"✋",rx:"5 × max hold | 2min rest",
+           tip:"Work toward 30 seconds then V-sit progression.",
+           cues:["Legs fully extended parallel to floor","Push floor away — tall spine","Point toes"],
+           m:["Hip Flexors","Core","Triceps","Lats"],prog:"Full L-sit → L-sit transitions → V-sit"}
+        ]},
+      "Strength":{name:"Strength Day",focus:"Max strength • Weighted calisthenics",
+        note:"Add a loaded backpack (books/water) to push-ups, dips, and rows to continue progressive overload.",
+        ex:[
+          {n:"Weighted Pull-Up",i:"⬆️",rx:"5 × 3–6 reps | 3min rest",
+           tip:"Use a loaded backpack. Track load + reps and beat it next session.",
+           cues:["Perfect form at all loads","Full hang to full chin over bar"],
+           m:["Lats","Biceps"],prog:"Add 2–5% load each week"},
+          {n:"Weighted Dip",i:"⬇️",rx:"5 × 3–6 reps | 3min rest",
+           tip:"Parallel bar dips with a loaded backpack. Best pressing overload tool in calisthenics.",
+           cues:["Torso upright for tricep emphasis","Full ROM — upper arm parallel at bottom"],
+           m:["Triceps","Chest","Delts"],prog:"Add load progressively"},
+          {n:"Archer Pull-Up",i:"🏹",rx:"4 × 4–6 each side | 3min rest",
+           tip:"One-arm pull-up progression. Extend the assisting arm nearly straight.",
+           cues:["Working arm does the real pulling","Minimize assist from extended arm over time"],
+           m:["Lats","Biceps","Core"],prog:"Archer → Typewriter → One-arm negatives → One-arm pull-up"}
+        ]},
+      "Active Recovery":{name:"Active Recovery",focus:"Mobility • Flexibility • Blood flow",
+        note:"Not a rest day — active restoration. Light movement accelerates recovery.",
+        ex:[
+          {n:"Hip Flexor Stretch",i:"🧘",rx:"3 × 60s each side",
+           tip:"Crucial for pistol squats and lower body health.",
+           cues:["Rear knee on floor, front shin vertical","Tilt pelvis posteriorly (tuck tailbone)","Breathe into the stretch"],
+           m:["Hip Flexors","Quad"],prog:"Deepen the stretch over time"},
+          {n:"Cat-Cow Spine Mobility",i:"🌊",rx:"3 × 10 slow reps",
+           tip:"Spinal health is long-term health. Do this every recovery day.",
+           cues:["Slow and controlled — breathe with each movement","Full flexion and full extension"],
+           m:["Spine","Core"],prog:"Add thoracic rotations"},
+          {n:"Wrist Circles & Prep",i:"🌀",rx:"2 × 60s each direction",
+           tip:"Wrists are the limiting factor in handstands. Warm them daily.",
+           cues:["Slow circles","Wrist push-ups on knuckles","Prayer stretch"],
+           m:["Wrist Extensors","Flexors"],prog:"Add wrist push-ups with more bodyweight"}
+        ]}
+    }}
+};
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let ph=1, wk=1, di=0;
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+// ═══════════════════════════════════════════════════════
+//  STORAGE HELPERS
+// ═══════════════════════════════════════════════════════
+function getSess(){try{return JSON.parse(localStorage.getItem('cs_sessions')||'[]')}catch{return[]}}
+function saveSess(a){try{localStorage.setItem('cs_sessions',JSON.stringify(a))}catch{}}
+function skey(p,w,d){return`p${p}w${w}d${d}`}
+function isLogged(p,w,d){return getSess().some(s=>s.key===skey(p,w,d))}
+
+// Media stored per exercise key
+function getMedia(exKey){try{return JSON.parse(localStorage.getItem('cs_media_'+exKey)||'[]')}catch{return[]}}
+function saveMedia(exKey,arr){try{localStorage.setItem('cs_media_'+exKey,JSON.stringify(arr))}catch{alert('Storage full — delete some media first.');}}
+
+// Theme
+function getTheme(){return localStorage.getItem('cs_theme')||'light';}
+function saveTheme(t){localStorage.setItem('cs_theme',t);}
+
+// ═══════════════════════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════════════════════
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('theme-btn').textContent = t==='dark'?'☀️':'🌙';
+  document.getElementById('theme-meta').content = t==='dark'?'#0a0a0a':'#f5f2eb';
+}
+function toggleTheme(){
+  const cur = getTheme()==='dark'?'light':'dark';
+  saveTheme(cur);applyTheme(cur);
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE ROUTING
+// ═══════════════════════════════════════════════════════
+function showPage(name){
+  ['workout','calendar','science'].forEach(p=>{
+    document.getElementById('page-'+p).classList.toggle('active',p===name);
+    document.getElementById('tab-'+p).classList.toggle('active',p===name);
+  });
+  document.getElementById('log-fab').style.display = name==='workout'?'':'none';
+  if(name==='calendar') renderCalendar();
+}
+
+// ═══════════════════════════════════════════════════════
+//  PHASE / WEEK / DAY RENDER
+// ═══════════════════════════════════════════════════════
+function setPhase(p){
+  ph=p;wk=1;di=0;
+  document.querySelectorAll('.pbtn').forEach((b,i)=>{
+    b.className='pbtn'+(i+1===p?` p${p}`:'');
+  });
+  ['pi1','pi2','pi3'].forEach((id,i)=>document.getElementById(id).style.display=i+1===p?'block':'none');
+  const dark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.getElementById('prog-fill').style.background = dark?PH[p].colorDark:PH[p].color;
+  renderAll();
+}
+
+function renderAll(){renderWeeks();renderDays();renderWorkout();updateTotal();}
+
+function renderWeeks(){
+  const g=document.getElementById('wgrid');
+  const total=PH[ph].weeks;g.innerHTML='';
+  for(let w=1;w<=total;w++){
+    const b=document.createElement('button');
+    const anyLogged=PH[ph].days.some((d,i)=>d!=='Rest'&&isLogged(ph,w,i));
+    b.className='wbtn'+(w===wk?' active':'')+(anyLogged?' logged':'');
+    b.textContent=`W${w}`;
+    b.onclick=()=>{wk=w;renderAll()};
+    g.appendChild(b);
+  }
+  const pct=(wk/PH[ph].weeks)*100;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=`Week ${wk} / ${PH[ph].weeks}`;
+}
+
+function renderDays(){
+  const tabs=document.getElementById('dtabs');
+  const dn=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  tabs.innerHTML='';
+  PH[ph].days.forEach((day,i)=>{
+    const b=document.createElement('button');
+    const isRest=day==='Rest';
+    const logged=!isRest&&isLogged(ph,wk,i);
+    b.className='dtab'+(isRest?' rest':'')+(i===di?' active':'')+(logged?' done':'');
+    b.textContent=isRest?'😴 Rest':`${dn[i]} · ${day}`;
+    b.onclick=()=>{di=i;renderDays();renderWorkout();updateLogBtn()};
+    tabs.appendChild(b);
+  });
+}
+
+function renderWorkout(){
+  const day=PH[ph].days[di];
+  const disp=document.getElementById('wdisplay');
+  updateLogBtn();
+  if(day==='Rest'){
+    disp.innerHTML=`<div class="restcard"><div class="resticon">😴</div><div class="resttitle">Rest Day</div><div class="resttext">Muscle growth happens during recovery, not training.<br><br>Prioritise sleep (7–9hrs), eat 1.6–2.2g protein per kg of bodyweight, and let your body rebuild stronger.<br><br>Optional: 20 min walk or light stretching.</div></div>`;
+    return;
+  }
+  const w=PH[ph].workouts[day];
+  if(!w){disp.innerHTML='';return;}
+  const logged=isLogged(ph,wk,di);
+  let html=`<div class="wname">${w.name}</div><div class="wfocus">${w.focus}</div>`;
+  if(logged)html+=`<div class="logged-banner">✅ <span>Session <strong>logged</strong>. Keep going, Olebogeng.</span></div>`;
+  html+=`<div class="pbanner">📈 <span>${w.note}</span></div>`;
+  w.ex.forEach((ex,i)=>{
+    const exKey=`p${ph}_${day.replace(/\s/g,'_')}_${i}`;
+    html+=`<div class="excard" id="ex${i}">
+      <div class="exhead" onclick="tEx(${i})">
+        <span class="exnum">${String(i+1).padStart(2,'0')}</span>
+        <div class="exicon" style="font-size:18px">${ex.i}</div>
+        <div class="exmain"><div class="exname">${ex.n}</div><div class="exrx">${ex.rx}</div></div>
+        <span class="exchev">▾</span>
+      </div>
+      <div class="exbody">
+        <p class="extip">${ex.tip}</p>
+        <div>${ex.cues.map(c=>`<div class="cue"><div class="cdot"></div><span>${c}</span></div>`).join('')}</div>
+        <div class="muscles">${ex.m.map(m=>`<span class="mtag">${m}</span>`).join('')}</div>
+        ${ex.prog?`<div class="exprog">▶ ${ex.prog}</div>`:''}
+        <div class="media-section">
+          <div class="media-title">Form guide — your media</div>
+          <div class="media-grid" id="mg_${exKey}"></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  disp.innerHTML=html;
+  // Render media grids after DOM update
+  w.ex.forEach((ex,i)=>{
+    const exKey=`p${ph}_${day.replace(/\s/g,'_')}_${i}`;
+    renderMediaGrid(exKey);
+  });
+}
+
+function tEx(i){
+  const card=document.getElementById(`ex${i}`);
+  card.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════
+//  MEDIA UPLOAD / DISPLAY
+// ═══════════════════════════════════════════════════════
+function renderMediaGrid(exKey){
+  const grid=document.getElementById('mg_'+exKey);
+  if(!grid)return;
+  const items=getMedia(exKey);
+  let html='';
+  items.forEach((item,idx)=>{
+    if(item.type==='image'){
+      html+=`<div class="media-item">
+        <img src="${item.data}" onclick="openLightbox('img','${exKey}',${idx})" loading="lazy">
+        <button class="media-del" onclick="delMedia('${exKey}',${idx})">×</button>
+      </div>`;
+    } else {
+      html+=`<div class="media-item">
+        <video src="${item.data}" onclick="openLightbox('vid','${exKey}',${idx})" muted playsinline></video>
+        <button class="media-del" onclick="delMedia('${exKey}',${idx})">×</button>
+      </div>`;
+    }
+  });
+  html+=`<label class="media-upload-btn">
+    <span>+</span><span>Add photo/video</span>
+    <input type="file" accept="image/*,video/*" style="display:none" onchange="handleMediaUpload(event,'${exKey}')">
+  </label>`;
+  grid.innerHTML=html;
+}
+
+function handleMediaUpload(e, exKey){
+  const file=e.target.files[0];
+  if(!file)return;
+  if(file.size>15*1024*1024){alert('File too large. Max 15MB.');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const items=getMedia(exKey);
+    items.push({type:file.type.startsWith('video')?'video':'image',data:ev.target.result,name:file.name});
+    saveMedia(exKey,items);
+    renderMediaGrid(exKey);
+  };
+  reader.readAsDataURL(file);
+}
+
+function delMedia(exKey,idx){
+  if(!confirm('Remove this media?'))return;
+  const items=getMedia(exKey);items.splice(idx,1);saveMedia(exKey,items);renderMediaGrid(exKey);
+}
+
+function openLightbox(type,exKey,idx){
+  const item=getMedia(exKey)[idx];
+  if(!item)return;
+  const c=document.getElementById('lightbox-content');
+  if(type==='img'){
+    c.innerHTML=`<img src="${item.data}" alt="Form guide">`;
+  } else {
+    c.innerHTML=`<video src="${item.data}" controls autoplay playsinline style="max-width:95vw;max-height:88vh;border-radius:10px"></video>`;
+  }
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-content').innerHTML='';
+}
+document.getElementById('lightbox').addEventListener('click',e=>{
+  if(e.target===document.getElementById('lightbox'))closeLightbox();
+});
+
+// ═══════════════════════════════════════════════════════
+//  LOG SESSION
+// ═══════════════════════════════════════════════════════
+function updateLogBtn(){
+  const day=PH[ph].days[di];
+  const fab=document.getElementById('log-fab');
+  if(day==='Rest'){fab.style.display='none';return;}
+  fab.style.display='flex';
+  if(isLogged(ph,wk,di)){fab.textContent='✓';fab.className='log-fab done';}
+  else{fab.textContent='✓';fab.className='log-fab';}
+}
+
+function updateTotal(){document.getElementById('total-stat').textContent=getSess().length;}
+
+function logSession(){
+  const day=PH[ph].days[di];
+  if(day==='Rest')return;
+  const key=skey(ph,wk,di);
+  const sessions=getSess();
+  if(sessions.some(s=>s.key===key)){
+    if(confirm('Session already logged. Remove it?')){
+      saveSess(sessions.filter(s=>s.key!==key));
+      renderAll();
+    }
+    return;
+  }
+  const now=new Date();
+  sessions.unshift({
+    key,ph,wk,di,day,
+    wname:PH[ph].workouts[day]?.name||day,
+    date:now.toISOString(),
+    dateStr:now.toLocaleDateString('en-ZA',{weekday:'short',year:'numeric',month:'short',day:'numeric'})
+  });
+  saveSess(sessions);
+  const fab=document.getElementById('log-fab');
+  fab.textContent='🎉';fab.className='log-fab done';
+  setTimeout(()=>renderAll(),900);
+}
+
+// ═══════════════════════════════════════════════════════
+//  CALENDAR
+// ═══════════════════════════════════════════════════════
+function calNav(dir){
+  calMonth+=dir;
+  if(calMonth<0){calMonth=11;calYear--;}
+  if(calMonth>11){calMonth=0;calYear++;}
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const sessions=getSess();
+  const now=new Date();
+
+  // Build set of logged date strings 'YYYY-MM-DD'
+  const loggedDates=new Set();
+  sessions.forEach(s=>{
+    const d=new Date(s.date);
+    loggedDates.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+  });
+
+  // Month label
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent=`${monthNames[calMonth]} ${calYear}`;
+
+  // Grid
+  const grid=document.getElementById('cal-grid');
+  const dayLabels=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let html=dayLabels.map(d=>`<div class="cal-day-label">${d}</div>`).join('');
+
+  // First day of month (0=Sun…6=Sat), convert to Mon-based
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const offset=(firstDay+6)%7; // Mon=0
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+
+  for(let i=0;i<offset;i++) html+=`<div class="cal-cell empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=d===now.getDate()&&calMonth===now.getMonth()&&calYear===now.getFullYear();
+    const logged=loggedDates.has(ds);
+    html+=`<div class="cal-cell${isToday?' today':''}${logged?' logged':''}">${d}</div>`;
+  }
+  grid.innerHTML=html;
+
+  // Streak calculation
+  let streak=0, best=0, cur=0;
+  // Walk backwards from today
+  const today=new Date(); today.setHours(0,0,0,0);
+  for(let i=0;i<365;i++){
+    const d=new Date(today); d.setDate(d.getDate()-i);
+    const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    if(loggedDates.has(ds)){
+      if(i===0||streak>0) streak++;
+      cur++;
+    } else {
+      if(i===0) streak=0; // no session today, don't break yet; check yesterday
+      else break;
+    }
+    best=Math.max(best,cur);
+  }
+  // Simpler best streak: scan all dates
+  const allDates=[...loggedDates].sort();
+  let bStreak=0,bCur=0,prev=null;
+  allDates.forEach(ds=>{
+    if(prev){
+      const prevD=new Date(prev),curD=new Date(ds);
+      const diff=(curD-prevD)/(86400000);
+      bCur = diff===1?bCur+1:1;
+    } else bCur=1;
+    bStreak=Math.max(bStreak,bCur);
+    prev=ds;
+  });
+
+  // Current streak (count from today going back)
+  let cStreak=0;
+  for(let i=0;i<365;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    if(loggedDates.has(ds)) cStreak++;
+    else if(i>0) break;
+  }
+
+  // This month sessions
+  const monthSessions=sessions.filter(s=>{
+    const d=new Date(s.date);
+    return d.getMonth()===calMonth&&d.getFullYear()===calYear;
+  });
+
+  document.getElementById('streak-val').textContent=cStreak;
+  document.getElementById('month-val').textContent=monthSessions.length;
+  document.getElementById('alltime-val').textContent=sessions.length;
+  document.getElementById('best-streak-val').textContent=bStreak;
+
+  // Month log list
+  const list=document.getElementById('month-log-list');
+  if(!monthSessions.length){
+    list.innerHTML=`<div class="log-empty">No sessions logged this month yet.</div>`;
+  } else {
+    list.innerHTML=monthSessions.map((s,i)=>{
+      const color=PH[s.ph]?.colorDark||'#35f0c8';
+      return `<div class="log-entry">
+        <div class="log-dot" style="background:${color}"></div>
+        <div class="log-main">
+          <div class="log-title">${s.wname}</div>
+          <div class="log-meta">Phase ${s.ph} · Week ${s.wk} · ${s.dateStr}</div>
+        </div>
+        <button class="log-del" onclick="delSessionFromCal('${s.key}')">×</button>
+      </div>`;
+    }).join('');
+  }
+}
+
+function delSessionFromCal(key){
+  if(!confirm('Remove this session?'))return;
+  saveSess(getSess().filter(s=>s.key!==key));
+  renderCalendar();
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════
+//  PWA INSTALL
+// ═══════════════════════════════════════════════════════
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  if(!localStorage.getItem('install_dismissed'))
+    document.getElementById('ibanner').style.display='flex';
+});
+document.getElementById('install-btn').addEventListener('click',async()=>{
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt=null;
+  document.getElementById('ibanner').style.display='none';
+});
+function dismissInstall(){
+  document.getElementById('ibanner').style.display='none';
+  localStorage.setItem('install_dismissed','1');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SERVICE WORKER
+// ═══════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+applyTheme(getTheme());
+renderAll();
+</script>
+</body>
+</html>
