@@ -504,6 +504,33 @@ h1 .hl{color:var(--lime);}
     </div>
   </div>
 
+  <!-- NF STREAK -->
+  <div style="margin:8px 0 20px">
+    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">NF Streak</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--shadow);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <div style="font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;line-height:1;color:var(--lime)" id="nf-days">0</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px;">days strong 🧠</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:4px;">BEST</div>
+          <div style="font-family:'Bebas Neue',Impact,sans-serif;font-size:28px;color:var(--muted)" id="nf-best">0</div>
+          <div style="font-size:10px;color:var(--muted)">days</div>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:10px;" id="nf-since">Start date: not set</div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="nfStart()" style="flex:1;padding:11px;border-radius:8px;border:1px solid var(--lime);background:var(--lime-bg);color:var(--lime);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">
+          ✓ Start / Reset
+        </button>
+        <button onclick="nfReset()" style="padding:11px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="month-log">
     <div class="month-log-title">This Month's Sessions</div>
     <div id="month-log-list"></div>
@@ -1153,6 +1180,7 @@ function renderCalendar(){
   document.getElementById('month-val').textContent=monthSessions.length;
   document.getElementById('alltime-val').textContent=sessions.length;
   document.getElementById('best-streak-val').textContent=bStreak;
+  renderNF();
 
   // Month log list
   const list=document.getElementById('month-log-list');
@@ -1178,6 +1206,60 @@ function delSessionFromCal(key){
   saveSess(getSess().filter(s=>s.key!==key));
   renderCalendar();
   renderAll();
+}
+
+// ═══════════════════════════════════════════════════════
+//  NF STREAK
+// ═══════════════════════════════════════════════════════
+function getNFStart(){return localStorage.getItem('nf_start')||null;}
+function getNFBest(){return parseInt(localStorage.getItem('nf_best')||'0');}
+
+function renderNF(){
+  const start=getNFStart();
+  const bestEl=document.getElementById('nf-best');
+  const daysEl=document.getElementById('nf-days');
+  const sinceEl=document.getElementById('nf-since');
+  if(!bestEl)return;
+  if(!start){
+    daysEl.textContent='0';
+    sinceEl.textContent='Start date: not set';
+  } else {
+    const startDate=new Date(start);
+    const now=new Date();
+    const days=Math.floor((now-startDate)/(1000*60*60*24));
+    daysEl.textContent=days;
+    sinceEl.textContent=`Since: ${startDate.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}`;
+    // Update best
+    const best=getNFBest();
+    if(days>best) localStorage.setItem('nf_best',days);
+  }
+  bestEl.textContent=getNFBest();
+}
+
+function nfStart(){
+  if(getNFStart()){
+    if(!confirm('Reset your NF streak and start fresh from today?'))return;
+  }
+  // Save best before resetting
+  const start=getNFStart();
+  if(start){
+    const days=Math.floor((new Date()-new Date(start))/(1000*60*60*24));
+    if(days>getNFBest()) localStorage.setItem('nf_best',days);
+  }
+  localStorage.setItem('nf_start',new Date().toISOString());
+  renderNF();
+}
+
+function nfReset(){
+  if(!confirm('Reset streak to 0? Your best record will be kept.'))return;
+  // Save current as best if higher
+  const start=getNFStart();
+  if(start){
+    const days=Math.floor((new Date()-new Date(start))/(1000*60*60*24));
+    if(days>getNFBest()) localStorage.setItem('nf_best',days);
+  }
+  localStorage.removeItem('nf_start');
+  renderNF();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1216,4 +1298,4 @@ renderAll();
 </script>
 </body>
 </html>
- 
+
